@@ -14,11 +14,29 @@ class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var darkSceneSwitch: UISwitch!
     
+    @IBOutlet var settingsView: UITableView!
+    
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell,
+        forRowAtIndexPath indexPath: NSIndexPath) {
+            cell.backgroundColor = view.backgroundColor
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let defaults = NSUserDefaults.standardUserDefaults()
         let defaultTipPercentage = defaults.integerForKey("defaultTip")
         defaultTipControl.selectedSegmentIndex = defaultTipPercentage
+        
+        let isDark = defaults.boolForKey("isDark")
+        darkSceneSwitch.on = isDark
+        if (isDark){
+            view.backgroundColor = darkColor
+
+        }else {
+            view.backgroundColor = lightColor
+
+            
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -32,10 +50,30 @@ class SettingsTableViewController: UITableViewController {
         defaults.setInteger(defaultTipControl.selectedSegmentIndex, forKey: "defaultTip")
         defaults.synchronize()
     }
+    
+    @IBAction func Switched(sender: UISwitch) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let isDark = defaults.boolForKey("isDark")
+        defaults.setBool(!isDark, forKey: "isDark")
+        if (!isDark){
+            view.backgroundColor = darkColor
+
+        }else {
+            view.backgroundColor = lightColor
+
+            
+        }
+        settingsView.reloadData()
+
+
+        defaults.synchronize()
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
 
 
    
